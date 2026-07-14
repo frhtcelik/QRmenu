@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lale Döner - Dijital Menü</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #120f0d; /* Tüm sayfaların tek tip koyu arka planı yapıldı */
+            --bg-warm: #1a1410;
+            --surface: #1a1410; /* Kart arka planları koyu temaya uyarlandı */
+            --ink: #ffffff;    /* Yazılar beyaz yapıldı */
+            --ink-soft: rgba(255, 255, 255, 0.65);
+            --accent: #e85d24;
+            --accent-deep: #c44a18;
+            --accent-glow: rgba(232, 93, 36, 0.35);
+            --gold: #d4a054;
+            --hero: #120f0d;
+            --line: rgba(255, 255, 255, 0.1);
+            --green: #3dba7a;
+            --radius: 16px;
+            --radius-sm: 12px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.55;
+            position: relative;
+        }
+
+        /* Sabit Arka Plan Efektleri (Her sayfada görünmesi için body'ye bağlandı) */
+        .global-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232, 93, 36, 0.25) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 90%, rgba(212, 160, 84, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 10% 70%, rgba(232, 93, 36, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .global-pattern {
+            position: fixed;
+            inset: 0;
+            opacity: 0.04;
+            background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ── 1. SAYFA: KARŞILAMA EKRANI ── */
+        .welcome-screen {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 52px 24px 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .brand-zone {
+            position: relative;
+            z-index: 1;
+            margin-top: 16px;
+        }
+
+        .brand-emblem {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 14px;
+        }
+
+        .brand-emblem::before,
+        .brand-emblem::after {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+        }
+
+        .brand-emblem::after {
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        /* TABELA STİLİ LOGO YAZISI */
+        .logo-container {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            font-family: 'Fraunces', Georgia, serif;
+            line-height: 1;
+        }
+
+        .logo-lale {
+            font-size: 52px;
+            font-weight: 900;
+            color: #e85d24;
+            letter-spacing: -1px;
+            transform: rotate(-2deg);
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .logo-doner {
+            font-size: 42px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-ye {
+            font-size: 28px;
+            font-weight: 800;
+            color: #e85d24;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+            margin-left: -4px;
+            transform: translateY(4px) rotate(5deg);
+            display: inline-block;
+        }
+
+        .logo-line {
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #e85d24 50%, transparent);
+            border-radius: 50%;
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+
+        .brand-zone p {
+            color: rgba(255,255,255,0.55);
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .info-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 100px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        .tag.open {
+            color: var(--green);
+            border-color: rgba(61, 186, 122, 0.35);
+            background: rgba(61, 186, 122, 0.12);
+        }
+
+        .btn-view-menu {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 17px 40px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 100px;
+            box-shadow: 0 6px 24px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-view-menu:active {
+            transform: scale(0.96);
+        }
+
+        .contact-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-align: left;
+        }
+
+        .contact-card .contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        .contact-card .contact-row + .contact-row {
+            margin-top: 8px;
+        }
+
+        .contact-icon {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(232, 93, 36, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .contact-card strong {
+            display: block;
+            color: rgba(255,255,255,0.85);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* ── 2. SAYFA: DİKEY KATEGORİ SEÇİM ALANI (TAM EKRAN YAPILDI) ── */
+        .category-select-screen {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100svh; /* Tam ekrana sığması sağlandı */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* İçerik dikeyde ortalandı */
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .category-select-screen h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .category-select-screen p {
+            font-size: 14px;
+            color: var(--ink-soft);
+            margin-bottom: 30px;
+        }
+
+        .vertical-nav-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        /* Giriş ekranındaki buton stiliyle tamamen birebir kozmetik */
+        .vertical-nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 18px 24px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 100px;
+            box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: transform 0.2s;
+        }
+
+        .vertical-nav-btn:active {
+            transform: scale(0.97);
+        }
+
+        .vertical-nav-btn span.btn-icon {
+            font-size: 18px;
+        }
+
+        /* ── 3. SAYFA: MENÜ LİSTELERİ ── */
+        .menu-page {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        .menu-section {
+            width: 100%;
+            padding: 8px 16px 24px;
+        }
+
+        .menu-header-bar {
+            text-align: center;
+            padding: 28px 0 8px;
+        }
+
+        .menu-header-bar h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .menu-header-bar p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin-top: 4px;
+        }
+
+        .category-block {
+            margin-bottom: 35px;
+        }
+
+        .category-title {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 28px 0 14px;
+            scroll-margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fff;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 8px;
+        }
+
+        .category-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(232,93,36,0.2), rgba(212,160,84,0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .menu-note {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, rgba(232,93,36,0.1), rgba(212,160,84,0.1));
+            border: 1px solid rgba(232,93,36,0.2);
+            border-radius: var(--radius-sm);
+        }
+
+        .menu-note strong {
+            color: var(--accent);
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            padding: 15px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .menu-item-divider {
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .menu-item-divider::before {
+            content: attr(data-label);
+            display: block;
+            width: 100%;
+            flex-basis: 100%;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            padding-bottom: 4px;
+            border-bottom: 1px dashed var(--line);
+            margin-bottom: 4px;
+        }
+
+        .item-details { flex: 1; min-width: 0; }
+        .item-details h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .item-details p {
+            font-size: 12px;
+            color: var(--ink-soft);
+            line-height: 1.45;
+        }
+
+        .item-price {
+            flex-shrink: 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            padding: 8px 13px;
+            border-radius: 10px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px var(--accent-glow);
+        }
+
+        /* ── FOOTER ── */
+        .restaurant-footer-info {
+            width: 100%;
+            padding: 32px 16px 40px;
+            color: var(--ink-soft);
+            border-top: 1px solid var(--line);
+        }
+
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-box h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--ink-soft);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .btn-maps {
+            background: #fff;
+            color: #120f0d;
+            border: none;
+            font-weight: 700;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            font-size: 11px;
+            color: var(--ink-soft);
+            margin-top: 20px;
+        }
+        
+        /* ── SAĞ ALTTAKİ SABİT BAŞA DÖN BUTONU ── */
+        .btn-scroll-top {
+            position: fixed;
+            bottom: 24px;
+            left: calc(50% + 240px - 70px); 
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 16px rgba(232, 93, 36, 0.4);
+            z-index: 999;
+            transition: transform 0.2s, opacity 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        @media (max-width: 480px) {
+            .btn-scroll-top {
+                left: auto;
+                right: 24px;
+            }
+        }
+
+        .btn-scroll-top span {
+            display: block;
+            width: min-content;
+        }
+
+        .btn-scroll-top:active {
+            transform: scale(0.92);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Global Arka Plan Efektleri -->
+    <div class="global-glow"></div>
+    <div class="global-pattern"></div>
+
+    <!-- ── 1. SAYFA: SABİT GİRİŞ EKRANI ── -->
+    <div class="welcome-screen">
+        <div class="brand-zone">
+            <div class="brand-emblem">Est. 1995</div>
+            <div class="logo-container">
+                <div class="logo-row">
+                    <span class="logo-lale">LALE</span>
+                    <span class="logo-doner">DÖNER</span>
+                    <span class="logo-ye">ye</span>
+                </div>
+                <div class="logo-line"></div>
+            </div>
+            <p>Lezzetin Değişmeyen Adresi</p>
+            <div class="info-tags">
+                <div id="status-tag" class="tag">Yükleniyor...</div>
+                <div class="tag">10:30 – 23:00</div>
+            </div>
+        </div>
+
+        <a href="#select-area" class="btn-view-menu">📖 Menüyü Gör</a>
+
+        <div class="contact-card">
+            <div class="contact-row">
+                <div class="contact-icon">📍</div>
+                <div>
+                    <strong>Adres</strong>
+                    Yazır Mah. Sultan Cad. No:1/B Selçuklu / Konya
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="contact-icon">📞</div>
+                <div>
+                    <strong>Telefon</strong>
+                    0332 265 00 51
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 2. SAYFA: DİKEY BÜYÜK KUTU BUTONLAR ── -->
+    <div id="select-area" class="category-select-screen">
+        <h2>Kategoriler</h2>
+        <p>İncelemek istediğiniz menü grubunu seçin</p>
+        
+        <div class="vertical-nav-container">
+            <a href="#kutu-et-durum-ekmek" class="vertical-nav-btn">
+                <span>🥖 Ekmek & Lavaş Arası Et Döner</span>
+                <span class="btn-icon">➔</span>
+            </a>
+            <a href="#kutu-tavuk-durum-ekmek" class="vertical-nav-btn">
+                <span>🌯 Ekmek & Lavaş Arası Tavuk Döner</span>
+                <span class="btn-icon">➔</span>
+            </a>
+            <a href="#kutu-hatay-usulleri" class="vertical-nav-btn">
+                <span>🌶️ Hatay Usulleri ve Patates Porsiyon</span>
+                <span class="btn-icon">➔</span>
+            </a>
+            <a href="#kutu-et-porsiyonlar" class="vertical-nav-btn">
+                <span>🍽️ Et Porsiyon ve Et beyti</span>
+                <span class="btn-icon">➔</span>
+            </a>
+            <a href="#kutu-tavuk-porsiyonlar" class="vertical-nav-btn">
+                <span>🍗 Tavuk Döner Porsiyonlar</span>
+                <span class="btn-icon">➔</span>
+            </a>
+            <a href="#kutu-icecekler" class="vertical-nav-btn">
+                <span>🥤 İçecekler</span>
+                <span class="btn-icon">➔</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ── 3. SAYFA: MENÜ LİSTELERİ (BLOK YAPILARI DÜZELTİLDİ) ── -->
+    <div class="menu-page">
+        <div class="menu-section">
+
+            <!-- KUTU 1: ET EKMEK & LAVAŞ -->
+            <div id="kutu-et-durum-ekmek" class="category-block">
+                <div class="category-title">
+                    <img src="EtSomon.jpeg" alt="Et Döner" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"> 
+                    Et Ekmek & Lavaş
+                </div>
+       
+                <div class="menu-list">
+                    <p class="menu-note"><strong>İkram:</strong> Acı sos - ketçap - yoğurt sos - turşu.</p>
+                             <div class="menu-list" id="list-et-durum-ekmek">
+    <div class="loading-spinner"></div>
+</div>
+                    <div class="menu-item" data-label="Ekmek Arası Et">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Et Döner (75 gr)</h3>
+                            <p>Çıtır somun ekmeğinde yaprak et döner, isteğe göre yeşillik ve sos</p>
+                        </div>
+                        <div class="item-price">220 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Et Döner (100 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">260 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Et Döner (150 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">400 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Et Döner (200 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Lavaş Arası Et">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Et Döner (75 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">220 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Et Döner (100 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">260 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Et Döner (150 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">400 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Et Döner (200 gr)</h3>
+                            <p>Et döner, Soğan ve domates</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KUTU 2: TAVUK EKMEK & LAVAŞ -->
+            <div id="kutu-tavuk-durum-ekmek" class="category-block">
+                <div class="category-title">
+                    <img src="EkmekTavuk.jpeg" alt="Tavuk Döner" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"> 
+                    Tavuk Ekmek & Lavaş
+                </div>
+        
+                <div class="menu-list">
+                    <p class="menu-note"><strong>İkram:</strong> Acı sos - Ketçap - Yoğurt sos - Turşu.</p>
+        <div class="menu-list" id="list-tavuk-durum-ekmek">
+    <div class="loading-spinner"></div>
+</div>
+                    <div class="menu-item" data-label="Ekmek Arası Tavuk">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Tavuk Döner (75 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">100 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Tavuk Döner (100 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">120 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Tavuk Döner (150 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">150 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Ekmek Arası Tavuk Döner (200 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">210 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Lavaş Arası Tavuk">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Tavuk Döner (75 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">110 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Tavuk Döner (100 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">130 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Tavuk Döner (150 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">160 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Lavaş Arası Tavuk Döner (200 gr)</h3>
+                            <p>Tavuk döner, yeşillik ve Soğan</p>
+                        </div>
+                        <div class="item-price">220 TL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KUTU 3: HATAY USULLERİ & ÖZEL -->
+            <div id="kutu-hatay-usulleri" class="category-block">
+                <div class="category-title">
+                    <img src="LavaşTavuk.jpeg" alt="Hatay Usulü" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"> 
+                    Hatay Usulleri & Özel
+                </div>
+     
+                <div class="menu-list">
+                     <p class="menu-note"><strong>İkram:</strong> Acı sos - Ketçap - Yoğurt sos - Turşu.</p>
+           <div class="menu-list" id="list-hatay-usulleri">
+    <div class="loading-spinner"></div>
+</div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Hatay Usulü Et Döner</h3>
+                            <p>Hatay soslu, patates, turşu ve özel lavaş</p>
+                        </div>
+                        <div class="item-price">300 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Hatay Usulü Tavuk Döner</h3>
+                            <p>Özel bol Hatay soslu, patates, turşu ve özel lavaş</p>
+                        </div>
+                        <div class="item-price">140 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk Zurna Dürüm</h3>
+                            <p>Doyurucu, dev boy zurna lavaş arası tavuk döner</p>
+                        </div>
+                        <div class="item-price">250 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Patates Porsiyon</h3>
+                            <p>Çıtır çıtır kızarmış porsiyon patates</p>
+                        </div>
+                        <div class="item-price">150 TL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KUTU 4: ET PORSİYONLAR -->
+            <div id="kutu-et-porsiyonlar" class="category-block">
+                <div class="category-title">
+                    <img src="Etiskender.jpeg" alt="Et Porsiyon" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"> 
+                    Et Döner Porsiyonlar
+                </div>
+     
+                <div class="menu-list">
+                    <p class="menu-note"><strong>İkram:</strong>Makarna - Çoban Salata - Marul Salata - Turşu - Patates Kızartma - Ezme.</p>
+                               <div class="menu-list" id="list-et-porsiyonlar">
+    <div class="loading-spinner"></div>
+</div>
+                    <div class="menu-item" data-label="Et İskender">
+                        <div class="item-details">
+                            <h3>Et İskender (120 gr)</h3>
+                            <p>Garnitür ikramları eşliğinde, özel tereyağı ve domates soslu</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et İskender (190 gr)</h3>
+                            <p>Garnitür ikramları eşliğinde, özel tereyağı ve domates soslu</p>
+                        </div>
+                        <div class="item-price">650 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et İskender (230 gr)</h3>
+                            <p>Garnitür ikramları eşliğinde, nefis tereyağlı geleneksel lezzet</p>
+                        </div>
+                        <div class="item-price">800 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Et Pilav Üstü">
+                        <div class="item-details">
+                            <h3>Et Pilav Üstü (120 gr)</h3>
+                            <p>Tereyağlı pirinç pilavı üzerinde yaprak et döner and zengin ikramlar</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Pilav Üstü (190 gr)</h3>
+                            <p>Tereyağlı pirinç pilavı üzerinde yaprak et döner and zengin ikramlar</p>
+                        </div>
+                        <div class="item-price">650 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Pilav Üstü (230 gr)</h3>
+                            <p>Doyurucu büyük porsiyon pilav üstü et lezzeti ve zengin ikramlar</p>
+                        </div>
+                        <div class="item-price">800 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Et Sade Porsiyon">
+                        <div class="item-details">
+                            <h3>Et Sade Porsiyon (120 gr)</h3>
+                            <p>Sade yaprak et döner, altında zengin garnitür ikramları ile</p>
+                        </div>
+                        <div class="item-price">450 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Sade Porsiyon (190 gr)</h3>
+                            <p>Sade yaprak et döner, altında zengin garnitür ikramları ile</p>
+                        </div>
+                        <div class="item-price">550 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Sade Porsiyon (230 gr)</h3>
+                            <p>Büyük porsiyon sade yaprak et döner, altında zengin garnitür ikramları ile</p>
+                        </div>
+                        <div class="item-price">750 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Et Beyti">
+                        <div class="item-details">
+                            <h3>Et Beyti (120 gr)</h3>
+                            <p>Özel sos ve lavaşa sarılı et döner dilimleri, yoğurt ve garnitür ile</p>
+                        </div>
+                        <div class="item-price">600 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Beyti (190 gr)</h3>
+                            <p>Özel sos ve lavaşa sarılı et döner dilimleri, yoğurt ve garnitür ile</p>
+                        </div>
+                        <div class="item-price">750 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Et Beyti (230 gr)</h3>
+                            <p>Yoğurt, özel sos and zengin garnitür ikramlı büyük porsiyon et beyti</p>
+                        </div>
+                        <div class="item-price">900 TL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KUTU 5: TAVUK PORSİYONLAR -->
+            <div id="kutu-tavuk-porsiyonlar" class="category-block">
+                <div class="category-title">
+                    <img src="TavukPorsiyon.jpeg" alt="Tavuk Porsiyon" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"> 
+                    Tavuk Döner Porsiyonlar
+                </div>
+       
+                <div class="menu-list">
+                    <p class="menu-note"><strong>İkram:</strong> Makarna - Çoban Salata - Marul Salata - Turşu - Patates Kızartma - Ezme.</p>
+         <div class="menu-list" id="list-tavuk-porsiyonlar">
+    <div class="loading-spinner"></div>
+</div>
+                    <div class="menu-item" data-label="Tavuk İskender">
+                        <div class="item-details">
+                            <h3>Tavuk İskender (120 gr)</h3>
+                            <p>Özel tereyağı, nefis sos, yoğurt, tırnak pide ve garnitür ikramları</p>
+                        </div>
+                        <div class="item-price">300 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk İskender (190 gr)</h3>
+                            <p>Özel tereyağı, nefis sos, yoğurt, tırnak pide and garnitür ikramları</p>
+                        </div>
+                        <div class="item-price">400 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk İskender (230 gr)</h3>
+                            <p>Nefis domates soslu, tereyağlı büyük porsiyon tavuk iskender</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Tavuk Pilav Üstü">
+                        <div class="item-details">
+                            <h3>Tavuk Pilav Üstü (120 gr)</h3>
+                            <p>Tereyağlı pirinç pilavı üzerinde tavuk döner ve zengin garnitürler</p>
+                        </div>
+                        <div class="item-price">300 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk Pilav Üstü (190 gr)</h3>
+                            <p>Tereyağlı pirinç pilavı üzerinde tavuk döner ve zengin garnitürler</p>
+                        </div>
+                        <div class="item-price">400 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk Pilav Üstü (230 gr)</h3>
+                            <p>Doyurucu porsiyon pilav üstü tavuk döner ve garnitür ikramları</p>
+                        </div>
+                        <div class="item-price">500 TL</div>
+                    </div>
+
+                    <div class="menu-item menu-item-divider" data-label="Tavuk Sade">
+                        <div class="item-details">
+                            <h3>Tavuk Sade Porsiyon (120 gr)</h3>
+                            <p>Sade tavuk döner, altında zengin garnitür ikramları ile</p>
+                        </div>
+                        <div class="item-price">250 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk Sade Porsiyon (190 gr)</h3>
+                            <p>Sade tavuk döner, altında zengin garnitür ikramları ile</p>
+                        </div>
+                        <div class="item-price">350 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Tavuk Sade Porsiyon (230 gr)</h3>
+                            <p>Büyük porsiyon sade tavuk döner ve altındaki zengin ikramlar</p>
+                        </div>
+                        <div class="item-price">450 TL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KUTU 6: İÇECEKLER -->
+            <div id="kutu-icecekler" class="category-block">
+                <div class="category-title">
+                    <span class="category-icon">🥤</span> 
+                    İçecekler
+                </div>
+                <div class="menu-list" id="list-icecekler">
+            <div class="loading-spinner"></div>
+        </div>
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Açık Ayran</h3>
+                            <p>Bol köpüklü, taze</p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Kapalı Ayran</h3>
+                            <p>Serinletici kutu ayran</p>
+                        </div>
+                        <div class="item-price">40 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Şişe Fanta</h3>
+                            <p>Cam şişede soğuk lezzet</p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Şişe Coca Cola</h3>
+                            <p>Cam şişede orijinal tat</p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Fanta</h3>
+                            <p>330 ml kutu fanta</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Coca Cola</h3>
+                            <p>330 ml kutu orijinal tat</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Şeftali Fuse Tea</h3>
+                            <p>Soğuk çay keyfi</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Karpuz Fuse Tea</h3>
+                            <p>Soğuk çay keyfi</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Mango Fuse Tea</h3>
+                            <p>Soğuk çay keyfi</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Teneke Kavun Çilek Fuse Tea</h3>
+                            <p>Soğuk çay keyfi</p>
+                        </div>
+                        <div class="item-price">70 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Şalgam</h3>
+                            <p>Geleneksel soğuk içecek</p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Şişe Niğde Gazozu</h3>
+                            <p>Ferahlatıcı efsane lezzet</p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Sade Soda</h3>
+                            <p>Doğal maden suyu</p>
+                        </div>
+                        <div class="item-price">40 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Sarıyer Kola</h3>
+                            <p></p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-details">
+                            <h3>Sarıyer Fanta</h3>
+                            <p></p>
+                        </div>
+                        <div class="item-price">50 TL</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- EN ALT FOOTER VE İLETİŞİM ALANI -->
+        <div class="restaurant-footer-info">
+            <div class="info-box">
+                <h4>📍 Detaylı Adres</h4>
+                <p>Yazır Mahallesi, Sultan Caddesi, No:1/B Selçuklu / Konya</p>
+            </div>
+            <div class="action-buttons">
+                <a href="tel:03322650051" class="btn btn-call">☎️ Hemen Ara</a>
+                <a href="https://maps.google.com/?q=Lale+Döner+Yazır+Mahallesi+Sultan+Caddesi+No:1/B+Selçuklu+Konya" target="_blank" class="btn btn-maps">🗺️ Yol Tarifi</a>
+            </div>
+            <div class="footer-copyright">
+                © 2026 Lale Döner. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </div>
+
+    <!-- DİNAMİK SAAT KONTROLÜ -->
+    <script>
+        function checkRestaurantStatus() {
+            const statusTag = document.getElementById('status-tag');
+            if (!statusTag) return;
+
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTimeInMinutes = (currentHour * 60) + currentMinute;
+
+           const openTimeInMinutes = (10 * 60) + 30; // 10:30
+            const closeTimeInMinutes = (23 * 60) + 0;  // 23:00
+
+            if (currentTimeInMinutes >= openTimeInMinutes && currentTimeInMinutes < closeTimeInMinutes) {
+                statusTag.textContent = 'Açık';
+                statusTag.className = 'tag open';
+                statusTag.style = '';
+            } else {
+                statusTag.textContent = 'Kapalı';
+                statusTag.className = 'tag';
+                statusTag.style.color = '#ef5350';
+                statusTag.style.borderColor = 'rgba(239, 83, 80, 0.3)';
+                statusTag.style.background = 'rgba(239, 83, 80, 0.08)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkRestaurantStatus);
+        setInterval(checkRestaurantStatus, 60000);
+        // Google Sheets Kimlik Ayarları
+        const SHEET_ID = "1JRAQX3v0PXC8tU02xSJe9LXJYM443g6StDAOY66Rxzk"; 
+        const SHEET_NAME = "Sayfa1"; // Eğer tablonun alt sekme adını değiştirmediysen "Sayfa1" olarak kalabilir
+        const API_URL = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+
+async function loadMenuData() {
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Veri çekilemedi.");
+        
+        const data = await response.json();
+        
+        const lists = {
+            "kutu-et-durum-ekmek": document.getElementById("list-et-durum-ekmek"),
+            "kutu-tavuk-durum-ekmek": document.getElementById("list-tavuk-durum-ekmek"),
+            "kutu-hatay-usulleri": document.getElementById("list-hatay-usulleri"),
+            "kutu-et-porsiyonlar": document.getElementById("list-et-porsiyonlar"),
+            "kutu-tavuk-porsiyonlar": document.getElementById("list-tavuk-porsiyonlar"),
+            "kutu-icecekler": document.getElementById("list-icecekler")
+        };
+
+        // Eski yükleniyor yazılarını temizle
+        Object.values(lists).forEach(list => { if (list) list.innerHTML = ""; });
+
+        data.forEach(item => {
+            const targetList = lists[item.category];
+            if (!targetList) return;
+
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "menu-item";
+            
+            if (item.sublabel && item.sublabel.trim() !== "") {
+                itemDiv.classList.add("menu-item-divider");
+                itemDiv.setAttribute("data-label", item.sublabel);
+            }
+
+            itemDiv.innerHTML = `
+                <div class="item-details">
+                    <h3>${item.name}</h3>
+                    <p>${item.description || ''}</p>
+                </div>
+                <div class="item-price">${item.price} TL</div>
+            `;
+            targetList.appendChild(itemDiv);
+        });
+
+    } catch (error) {
+        console.error("Hata:", error);
+        document.querySelectorAll(".loading-spinner").forEach(spinner => {
+            spinner.textContent = "Menü yüklenemedi. Lütfen internetinizi kontrol edin.";
+            spinner.style.color = "#ef5350";
+        });
+    }
+}
+
+// DomContentLoaded olayına loadMenuData()'yı ekle
+document.addEventListener('DOMContentLoaded', () => {
+    loadMenuData();
+    checkRestaurantStatus(); // Mevcut saat fonksiyonun
+});
+
+    </script>
+
+    <!-- 2. Sayfadaki Kategorilere Uçuran Daire Buton -->
+    <a href="#select-area" class="btn-scroll-top">
+        <span>BAŞA DÖN</span>
+    </a>
+    
+</body>
+</html>
